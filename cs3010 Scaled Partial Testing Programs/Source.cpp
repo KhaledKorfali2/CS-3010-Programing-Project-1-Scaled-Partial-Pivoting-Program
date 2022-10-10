@@ -19,11 +19,13 @@ void combineMatricies(vector<vector<float>>& a, vector<float>& b, vector<vector<
 
 int main()
 {
+
+	//Initialize cout to print only 2 places after decimal points
 	cout << fixed;
 	cout << setprecision(2);
 
 
-	//Variables
+	//Variable Declarations
 	int numOfEquations = 0;
 	int inputMethod = -1;
 	int x;
@@ -43,6 +45,7 @@ int main()
 	vector<float> xi;
 
 
+	//Get User Input Method
 	cout << "How many equations will you be entering?: " << endl;
 	cin >> numOfEquations;
 	while (numOfEquations != 1 && numOfEquations != 2 && numOfEquations != 3 && numOfEquations != 4 && numOfEquations != 5 && numOfEquations != 6 && numOfEquations != 7 && numOfEquations != 8 && numOfEquations != 9 && numOfEquations != 10)
@@ -53,7 +56,7 @@ int main()
 		cin >> numOfEquations;
 	}
 
-	//create a 2-d vector inizalized with all 0's
+	//inizalize vectors with all 0's
 	userEquations.assign(numOfEquations, vector<float>(numOfEquations + 1, 0));
 	a.assign(numOfEquations, vector<float>(numOfEquations, 0));
 	b.assign(numOfEquations, 0);
@@ -68,6 +71,7 @@ int main()
 	cout << "   the b values in a simple text file format" << endl;
 	cin >> inputMethod;
 
+	//Checks that User is Inputing Either a "1" or a "2"
 	while (inputMethod != 1 && inputMethod != 2)
 	{
 		cin.clear();                        // clear error flags
@@ -75,9 +79,11 @@ int main()
 		cout << "Error: Please choose between options 1 and 2." << endl;
 		cin >> inputMethod;
 	}
+	//User has chosen to manually input values for augmented matrix
 	if (inputMethod == 1)
 	{
 		std::cout << "Enter coefficent values for your augmented coeffiecent matrix: \n";
+		//Gets user input line by line and stores in vecor userEquations
 		for (int i = 1; i <= numOfEquations; i++)
 		{
 			std::cout << i << ": ";
@@ -95,11 +101,14 @@ int main()
 			row.clear();
 		}
 	}
+	//User has chosen to input the name of a txt file containg values for augmented matrix
 	else if (inputMethod == 2)
 	{
 		cout << "Please enter the name of your properly formated txt file: " << endl;
 		cin >> userFile;
-		//take runtimes from Time.txt and average them
+
+
+		//Reads in the data line by line storing values in userEquations
 		fstream fileData;
 		string line;
 		string num;
@@ -130,7 +139,7 @@ int main()
 		cout << "Error: Please choose between options 1 and 2." << endl;
 	}
 
-
+	//Split userEquations into coefficient matrix "a" and vetor matrix "b"
 	for (int row = 0; row < numOfEquations; row++)
 	{
 		for (int col = 0; col <= numOfEquations; col++)
@@ -152,6 +161,7 @@ int main()
 	//displayMatrix2(a, numOfEquations);
 	//display1_DArray(b, numOfEquations, "b");
 
+	//Calculates Scale vector
 	for (i = 0; i < numOfEquations; i++)
 	{
 		l[i] = i;
@@ -174,6 +184,7 @@ int main()
 
 	display1_DArray(l, numOfEquations, "l");
 
+	//Calculates ratios
 	vector<float> ratios;
 	ratios.assign(numOfEquations, 0);
 	cout << "\n\n";
@@ -194,6 +205,8 @@ int main()
 		display1_DArray(l, numOfEquations, "l");
 		cout << "rmax = " << rmax << endl;
 		//cout << "rindex = " << rindex << endl;
+
+		//assigns pivot row
 		temp = l[i];
 		l[i] = l[rindex];
 		l[rindex] = temp;
@@ -201,6 +214,7 @@ int main()
 		//cout << "pivot index in l = " << l[rindex] << endl;
 		cout << "pivot row = " << l[i] << endl;
 		
+		//Guasuan Elimination Step
 		for (j = i + 1;j < numOfEquations;j++)
 		{
 			//cout << "i = " << i << "k = " << k << endl;
@@ -229,6 +243,7 @@ int main()
 	//Deallocate s
 	//s.clear();
 
+	//Finds values for x through back substution
 	xi[numOfEquations - 1] = b[l[numOfEquations - 1]] / a[l[numOfEquations - 1]][numOfEquations - 1];
 	//cout << "init xi: " << xi[numOfEquations - 1] << endl;
 	for (j = numOfEquations - 2; j > -1;j--)
@@ -245,6 +260,8 @@ int main()
 	combineMatricies(a, b, userEquations, numOfEquations);
 	displayMatrix(userEquations, numOfEquations);*/
 	//displayMatrix2(a, numOfEquations);
+
+	//Outputs values for x
 	display1_DArray(xi, numOfEquations, "xi");
 	for (int row = 0; row < numOfEquations; row++)
 	{
@@ -252,6 +269,7 @@ int main()
 	}
 }
 
+//Combines adjecency matrix "a" with vector matrix "b"
 void combineMatricies(vector<vector<float>>& a, vector<float>& b, vector<vector<float>>& userEquations, int numOfEquations)
 {
 	for (int row = 0; row < numOfEquations; row++)
@@ -270,6 +288,8 @@ void combineMatricies(vector<vector<float>>& a, vector<float>& b, vector<vector<
 	}
 }
 
+
+//Function that displays an integer-value matrix
 void display1_DArray(vector<int>& matrix, int numofEquations, string matrixName)
 {
 	for (int i = 0; i < numofEquations; i++)
@@ -286,6 +306,7 @@ void display1_DArray(vector<int>& matrix, int numofEquations, string matrixName)
 	cout << "]" << endl;
 }
 
+//Function that displays a float-value matrix of size n
 void display1_DArray(vector<float>& matrix, int numofEquations, string matrixName)
 {
 	for (int i = 0; i < numofEquations; i++)
@@ -302,7 +323,7 @@ void display1_DArray(vector<float>& matrix, int numofEquations, string matrixNam
 	cout << "]" << endl;
 }
 
-
+//Function that displays a float-value matrix of size n x n+1
 void displayMatrix(vector<vector<float>>& matrix, int numOfEquations)
 {
 	for (int i = 0; i < numOfEquations; i++)
@@ -315,6 +336,7 @@ void displayMatrix(vector<vector<float>>& matrix, int numOfEquations)
 	}
 }
 
+//Function that displays a float-value matrix of size n x n
 void displayMatrix2(vector<vector<float>>& matrix, int numOfEquations)
 {
 	for (int i = 0; i < numOfEquations; i++)
